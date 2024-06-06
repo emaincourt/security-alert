@@ -93,6 +93,9 @@ export function run() {
                 },
                 sarifContentSourceRoot: {
                     type: "string"
+                },
+                postEmptyResults: {
+                    type: "boolean"
                 }
             },
             autoHelp: true,
@@ -142,7 +145,8 @@ export function run() {
             severity: cli.flags.severity?.length != 0 ? cli.flags.severity : ALLOWED_SEVERITIES,
             failon: cli.flags.failon?.length != 0 ? cli.flags.failon : false,
             suppressedResults: cli.flags.suppressedResults,
-            title: cli.flags.title
+            title: cli.flags.title,
+            postEmptyResults: cli.flags.postEmptyResults
         }).then((result) => {
             if (!result) {
                 return "";
