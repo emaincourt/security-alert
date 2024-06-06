@@ -25,6 +25,7 @@ export type CreatedOptions = {
     simple?: boolean;
     severity?: readonly string[];
     failon?: any;
+    postEmptyResults?: boolean;
 };
 
 export type PostedCommentResult =
@@ -48,7 +49,7 @@ export async function postComment(options: CreatedOptions): Promise<PostedCommen
                 "Example: https://github.com/owner/reponame/network/alert/package-lock.json/axios/open"
         );
     }
-    if (content?.runs?.[0]?.results.length === 0) {
+    if (content?.runs?.[0]?.results.length === 0 && !options.postEmptyResults) {
         return {
             posted: false,
             reason: "There are no results in this SARIF run 0, exiting without a comment !",
@@ -79,7 +80,7 @@ export async function postComment(options: CreatedOptions): Promise<PostedCommen
         })
         .join("\n\n");
     if (dryRun) {
-        if (resultsHasMessage.length === 0) {
+        if (resultsHasMessage.length === 0 && !options.postEmptyResults) {
             console.log("It will not post, because the markdown is empty");
         }
         console.log(`DryRun results:
